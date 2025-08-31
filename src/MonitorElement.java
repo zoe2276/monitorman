@@ -6,10 +6,12 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.*;
 import java.util.HashMap;
+import java.util.prefs.*;
 
 public class MonitorElement extends JPanel implements MouseListener, MouseMotionListener {
     private Container parent;
     private Monitor monitor;
+    private JLabel label;
     int startX = -1, startY = -1;
     boolean moving = false;
     int endX = -1, endY = -1;
@@ -25,14 +27,19 @@ public class MonitorElement extends JPanel implements MouseListener, MouseMotion
             String monitorSize = JOptionPane.showInputDialog(this, "Please enter the size for monitor \"" + this.monitor.getId() + "\":", "Enter monitor size", JOptionPane.PLAIN_MESSAGE);
             this.monitor.setSize(Float.valueOf(monitorSize), true);
         }
+        // get unit from prefs
+        Preferences prefs = Preferences.userNodeForPackage(MonitorManagerGui.class);
+        final String pkUnit = "pk_unit";
+        String prefsUnit = prefs.get(pkUnit, "in");
 
         // border
         TitledBorder monitorElemBorder = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), this.monitor.getId());
         monitorElemBorder.setTitleJustification(TitledBorder.CENTER);
         monitorElemBorder.setTitlePosition(TitledBorder.DEFAULT_POSITION);
         
-        String monitorLabel = String.valueOf(this.monitor.getSize()) + this.monitor.getUnit();
+        String monitorLabel = String.valueOf(this.monitor.getSize()) + prefsUnit;
         JLabel label = new JLabel(monitorLabel, JLabel.CENTER);
+        setLabel(label);
         add(label);
         setBorder(monitorElemBorder);
         // setSize(16, 9);
@@ -87,6 +94,7 @@ public class MonitorElement extends JPanel implements MouseListener, MouseMotion
     public void moveMonitor(int x, int y) {
         try {
             this.monitor.setPosition(x, y);
+            System.out.println("moving monitor " + this.monitor.getId() + " to " + x + "," + y);
         } catch (IOException e) {
             // looks like we hit it out of bounds! do nothing.
         }
@@ -104,5 +112,12 @@ public class MonitorElement extends JPanel implements MouseListener, MouseMotion
     }
     public void setMonitor(Monitor monitor) {
         this.monitor = monitor;
+    }
+
+    public JLabel getLabel() {
+        return this.label;
+    }
+    public void setLabel(JLabel label) {
+        this.label = label;
     }
 }

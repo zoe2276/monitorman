@@ -1,9 +1,6 @@
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import javax.swing.JPanel;
 
 public class MonitorLayoutPanel extends JPanel {
     private int width;

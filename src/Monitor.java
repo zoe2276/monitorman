@@ -10,18 +10,20 @@ public class Monitor {
     private int x;
     private int y;
     private float size;
-    private String unit;
+    // private String unit; // removed - unit should be a global setting
     private String aspectRatio;
 
+    private MonitorElement guiRef;
+
     
-    public Monitor(MonitorLayoutPanel parent, String id, int viewportWidth, int viewportHeight, float size, String unit, String aspectRatio) throws IOException {
+    public Monitor(MonitorLayoutPanel parent, String id, int viewportWidth, int viewportHeight, float size, String aspectRatio) throws IOException {
         // Create a monitor with a known size
         this.setParent(parent);
         this.setId(id);
         this.setViewportWidth(viewportWidth);
         this.setViewportHeight(viewportHeight);
         this.setSize(size, false);
-        this.setUnit(unit);
+        // this.setUnit(unit);
         this.setAspectRatio(aspectRatio);
     }
     
@@ -33,14 +35,23 @@ public class Monitor {
         this.setViewportHeight(viewportHeight);
     }
 
-    public Monitor(String id, int viewportWidth, int viewportHeight, float size, String unit, String aspectRatio) throws IOException {
+    public Monitor(String id, int viewportWidth, int viewportHeight, float size, String aspectRatio) throws IOException {
         // Create an orphaned monitor with a known size
         this.setId(id);
         this.setViewportWidth(viewportWidth);
         this.setViewportHeight(viewportHeight);
         this.setSize(size, false);
-        this.setUnit(unit);
+        // this.setUnit(unit);
         this.setAspectRatio(aspectRatio);
+    }
+
+    public Monitor(String id, int viewportWidth, int viewportHeight, float size) throws IOException {
+        // Create an orphaned monitor with a known size
+        this.setId(id);
+        this.setViewportWidth(viewportWidth);
+        this.setViewportHeight(viewportHeight);
+        this.setSize(size, false);
+        // this.setUnit(unit);
     }
 
     public Monitor(String id, int viewportWidth, int viewportHeight) {
@@ -97,16 +108,18 @@ public class Monitor {
         }
     }
 
-    public String getUnit() {
-        return this.unit;
-    }
-    public void setUnit(String unit) throws IOException {
-        if (unit == "cm" || unit == "in") {
-            this.unit = unit;
-        } else {
-            throw new IOException("Provided unit does not belong to the allowable set: ['cm', 'int'].");
+    /*
+        public String getUnit() {
+            return this.unit;
         }
-    }
+        public void setUnit(String unit) throws IOException {
+            if (unit == "cm" || unit == "in") {
+                this.unit = unit;
+            } else {
+                throw new IOException("Provided unit does not belong to the allowable set: ['cm', 'int'].");
+            }
+        }
+    */
 
     public String getAspectRatio() {
         return this.aspectRatio;
@@ -120,6 +133,13 @@ public class Monitor {
     }
     public void setParent(MonitorLayoutPanel parent) {
         this.parent = parent;
+    }
+
+    public MonitorElement getGuiElement() {
+        return this.guiRef;
+    }
+    public void setGuiElement(MonitorElement guiElement) {
+        this.guiRef = guiElement;
     }
 
     public HashMap<String, Integer> getViewportSize() {
