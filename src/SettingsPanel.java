@@ -17,10 +17,12 @@ public class SettingsPanel extends JPanel {
         // unit selector
         String[] units = { "in", "cm" };
         
-        JComboBox<String> inputUnit = new JComboBox<String>(units);
+        // JComboBox<String> inputUnit = new JComboBox<String>(units);
+        boolean inputUnitInitialState = prefs.get(pkUnit, "in") == "in" ? true : false;
+        SwitchButton inputUnit = new SwitchButton("Unit", "in", "cm", inputUnitInitialState);
         inputUnit.addActionListener(event -> {
             // System.out.println(event.toString());
-            String newUnit = (String) inputUnit.getSelectedItem();
+            String newUnit = inputUnit.isSelected() ? "cm" : "in";
             prefs.put(pkUnit, newUnit);
             
             // inform the parent to refresh its children's labels and computed sizes
@@ -39,15 +41,26 @@ public class SettingsPanel extends JPanel {
     }
 }
 
-class BinButton extends JToggleButton {
-    private String label;
-    private Action action;
+class SwitchButton extends JToggleButton {
+    private String label = "Switch"; // general label
+    private String label0 = "Off"; // "off" state label
+    private String label1 = "On"; // "on" state label
 
-    BinButton(String label, Action action) {
-        super(action);
+    SwitchButton(String label, String label0, String label1, boolean initialState) {
+        String currentValue = initialState ? label1 : label0;
+        super(currentValue);
 
         setLabel(label);
-        setAction(action);
+        setLabel0(label0);
+        setLabel1(label1);
+
+        addItemListener(e -> {
+            if (isSelected()) {
+                setText(getLabel1());
+            } else {
+                setText(getLabel0());
+            }
+        });
     }
 
     //g/s
@@ -59,10 +72,17 @@ class BinButton extends JToggleButton {
         this.label = label;
     }
 
-    public Action getAction() {
-        return this.action;
+    public String getLabel0() {
+        return this.label0;
     }
-    public void setAction(Action action) {
-        this.action = action;
+    public void setLabel0(String label) {
+        this.label0 = label;
+    }
+
+    public String getLabel1() {
+        return this.label1;
+    }
+    public void setLabel1(String label) {
+        this.label1 = label;
     }
 }
