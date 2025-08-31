@@ -85,24 +85,6 @@ public class MonitorManagerGui extends JFrame {
         add(settingsPanel, BorderLayout.NORTH);
     }
 
-    public static void main(String[] args) throws IOException {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                new MonitorManagerGui().setVisible(true);
-                for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                    if ("Nimbus".equals(info.getName())) {
-                        UIManager.setLookAndFeel(info.getClassName());
-                        break;
-                    }
-                }
-            } catch (IOException e) {
-                System.err.println("IOException: " + e);
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-                e.getStackTrace();
-            }
-        });
-    }
-
     public MonitorLayoutPanel getLayoutPanel() {
         return this.layoutPanel;
     }
